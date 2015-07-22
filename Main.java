@@ -1,14 +1,19 @@
 public class Main {
 
 	public static void main(String[] args) {
-		boolean keepGoing = true;
-		boolean mutex;
+		String sMusicLoc = "/piano/piano-ff-0";
+		boolean bKeepGoing = true;
+		boolean bMutex;
+		int iFileNum = 30;
+		String sFileNum = "30";
 		firstTest soundTest = new firstTest();
-		while(keepGoing){
-			mutex = true;
-			if (mutex){
-				mutex = soundTest.playSound("/piano/39165__jobro__piano-ff-018.wav");
-			}
+		System.out.println(sMusicLoc + sFileNum   + ".wav");
+		while(bKeepGoing){
+			iFileNum++;
+			sFileNum = iFileNum+"";
+			bMutex =soundTest.playSound(sMusicLoc + sFileNum   + ".wav");
+			System.out.println("out of playsound");
+			
 		}
 	}
 }	
