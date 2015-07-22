@@ -6,8 +6,8 @@ public class Main {
 		firstTest soundTest = new firstTest();
 		while(keepGoing){
 			mutex = true;
-		if (mutex){
-		mutex = soundTest.playSound("/piano/39165__jobro__piano-ff-018.wav");
+			if (mutex){
+				mutex = soundTest.playSound("/piano/39165__jobro__piano-ff-018.wav");
 			}
 		}
 	}
