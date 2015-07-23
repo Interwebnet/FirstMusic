@@ -1,19 +1,39 @@
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.sound.sampled.LineUnavailableException;
+
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws LineUnavailableException, IOException {
 		String sMusicLoc = "/piano/piano-ff-0";
 		boolean bKeepGoing = true;
-		boolean bMutex;
-		int iFileNum = 30;
+		ArrayList<SoundPlayer> PlayerList = new ArrayList<SoundPlayer>();
+		boolean bMutex = true;
+		System.out.println(PlayerList.size());
+		int iFileNum = 1;
 		String sFileNum = "30";
-		firstTest soundTest = new firstTest();
+		SoundPlayer soundTest = new SoundPlayer();
+		soundTest.loadSound(sMusicLoc);
 		System.out.println(sMusicLoc + sFileNum   + ".wav");
+		soundTest.playSound(iFileNum);
 		while(bKeepGoing){
-			iFileNum++;
-			sFileNum = iFileNum+"";
-			bMutex =soundTest.playSound(sMusicLoc + sFileNum   + ".wav");
-			System.out.println("out of playsound");
 			
+		//	System.out.println("In");
+			if(bMutex){
+				//System.out.println("in " + bMutex);
+				//soundTest.playSound(iFileNum);
+				bMutex = false;
+			}
+			//System.out.println(soundTest.isNotActive());
+			if(soundTest.isNotActive()){
+				
+				bMutex = true;
+				
+				iFileNum++;
+				sFileNum = iFileNum+"";
+				//bKeepGoing = false;
+			}
 		}
 	}
 }	
