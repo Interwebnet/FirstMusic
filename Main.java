@@ -7,34 +7,27 @@ public class Main {
 
 	public static void main(String[] args) throws LineUnavailableException, IOException {
 		String sMusicLoc = "/piano/piano-ff-0";
-		boolean bKeepGoing = true;
 		ArrayList<SoundPlayer> PlayerList = new ArrayList<SoundPlayer>();
 		boolean bRelease = false;
 		boolean bMutex = true;
 		System.out.println(PlayerList.size());
-		int iFileNum = 1;
-		String sFileNum = "30";
 		SoundPlayer soundTest = new SoundPlayer();
 		soundTest.loadSound(sMusicLoc);
-		System.out.println(sMusicLoc + sFileNum   + ".wav");
-		soundTest.playSound(iFileNum);
-		while(bKeepGoing){
-			
-		//	System.out.println("In");
+		//soundTest.playSound(iFileNum);
+		for(int iFileNum = 1;iFileNum<=30;){
 			if(bMutex){
 				System.out.println(iFileNum);
-				bRelease=soundTest.playSound(iFileNum);
 				bMutex = false;
+				bRelease=false;
+				bRelease=soundTest.playSound(iFileNum);
 			}
-			//System.out.println(soundTest.isNotActive());
 			if(soundTest.isNotActive()){
-				
-				bMutex = true;
 				if (bRelease){
+					
+					bMutex = true;
+					bRelease=false;
 					iFileNum++;
-					sFileNum = iFileNum+"";
 				}
-				//bKeepGoing = false;
 			}
 		}
 	}
