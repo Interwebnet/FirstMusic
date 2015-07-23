@@ -9,6 +9,7 @@ public class Main {
 		String sMusicLoc = "/piano/piano-ff-0";
 		boolean bKeepGoing = true;
 		ArrayList<SoundPlayer> PlayerList = new ArrayList<SoundPlayer>();
+		boolean bRelease = false;
 		boolean bMutex = true;
 		System.out.println(PlayerList.size());
 		int iFileNum = 1;
@@ -21,17 +22,18 @@ public class Main {
 			
 		//	System.out.println("In");
 			if(bMutex){
-				//System.out.println("in " + bMutex);
-				//soundTest.playSound(iFileNum);
+				System.out.println(iFileNum);
+				bRelease=soundTest.playSound(iFileNum);
 				bMutex = false;
 			}
 			//System.out.println(soundTest.isNotActive());
 			if(soundTest.isNotActive()){
 				
 				bMutex = true;
-				
-				iFileNum++;
-				sFileNum = iFileNum+"";
+				if (bRelease){
+					iFileNum++;
+					sFileNum = iFileNum+"";
+				}
 				//bKeepGoing = false;
 			}
 		}

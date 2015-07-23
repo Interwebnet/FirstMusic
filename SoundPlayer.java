@@ -1,6 +1,5 @@
 import java.io.IOException;
 import java.util.ArrayList;
-
 import javax.sound.sampled.*;
 
 public class SoundPlayer implements Runnable {
@@ -47,7 +46,7 @@ public class SoundPlayer implements Runnable {
 		System.out.println("new thread");
 		
 	}
-	public void playSound(int args) throws LineUnavailableException, IOException{
+	public boolean playSound(int args) {
 		class Player implements Runnable {
 			public void run() {
 				System.out.println(audioList.size()+ " "+ args +" " + clip.isActive());
@@ -68,9 +67,9 @@ public class SoundPlayer implements Runnable {
 				while(clip.isActive()){
 					clip.drain();
 				}
-				System.out.println("s");
 				clip.stop();
 				clip.close();
+				System.out.println("s");
 				
 			}
 		}
@@ -78,7 +77,9 @@ public class SoundPlayer implements Runnable {
 			Player player = new Player();
 			Thread play = new Thread(player);
 			play.start();
+			while(play.isAlive());
 		}
+		return true;
 	}
 }	
 
