@@ -7,11 +7,13 @@ import java.util.concurrent.Semaphore;
 import javax.sound.sampled.*;
 
 public class SoundPlayer  {
-	private Semaphore mutex = new Semaphore(1);
+	private Semaphore mutex;
 	private Clip clip;
 	static private ArrayList<AudioInputStream> audioList = new ArrayList<AudioInputStream>();
 	
+
 	public SoundPlayer(){
+		mutex = new Semaphore(1);
 		try {
 			clip = AudioSystem.getClip();
 		}catch (Exception e) {
@@ -22,7 +24,7 @@ public class SoundPlayer  {
 		return (!clip.isActive());
 	}
 	public boolean isLocked(){
-		return (mutex.availablePermits()==0);
+		return (mutex.availablePermits()< 1);
 	}
 		
 	public void loadSound(String args) {
@@ -52,14 +54,12 @@ public class SoundPlayer  {
 	public boolean playSound(int args) throws InterruptedException {
 	
 		class Player implements Runnable {
-			//Semaphore mutex = new Semaphore(1);
 			public void run() {
 				
 				//System.out.println(audioList.size()+ " "+ args +" " + clip.isActive());
 				try {
 				//	System.out.println(mutex.availablePermits() + " MUTEX");
-					
-					System.out.println("In mutex " +args);
+
 					clip.open(audioList.get(args));
 					
 				} catch (LineUnavailableException e) {
@@ -69,15 +69,24 @@ public class SoundPlayer  {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} 
-					FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-					gainControl.setValue(0.0f);
+//					FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+//					gainControl.setValue(0.0f);
 				
 				clip.start(); 
+				double time= System.currentTimeMillis();
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				clip.drain();
-				
+				System.out.println("Playing: "+args+", in thread.");
 				while(clip.isActive()){
 					clip.drain();
 				}
+				double time2= System.currentTimeMillis();
+				System.out.println(time2 - time + " playing:" + args);
 				
 				clip.stop();
 				clip.close();
@@ -87,8 +96,8 @@ public class SoundPlayer  {
 			}
 		}
 
-		if(audioList.size() > args & mutex.availablePermits()==1){
-			//System.out.println(mutex.availablePermits());
+		if(audioList.size() > args & mutex.availablePermits()>0){
+			//System.out.println(mutex.availablePermits()+ " Permits");
 			mutex.acquire();
 			Player player = new Player();
 			Thread play = new Thread(player);
